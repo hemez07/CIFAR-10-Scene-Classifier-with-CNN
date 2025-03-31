@@ -97,3 +97,26 @@ epochs=5):
 
 # Train the model
 train_model(model, train_loader, val_loader, optimizer, criterion)
+
+
+
+def evaluate_model(model, test_loader):
+    model.eval()
+    correct = 0
+    total = 0
+    with torch.no_grad():
+        for images, labels in test_loader:
+            outputs = model(images)
+            _, predicted = torch.max(outputs, 1)
+            total += labels.size(0)
+            correct += (predicted == labels).sum().item()
+    return correct / total
+
+test_accuracy = evaluate_model(model, test_loader)
+print(f"Test Accuracy: {test_accuracy:.4f}")
+
+# Plot results
+plt.bar(["Test Accuracy"], [test_accuracy])
+plt.ylabel("Accuracy")
+plt.title("CNN Model Performance")
+plt.show()
